@@ -1,0 +1,58 @@
+---
+- name: update web, nfs and db servers
+  hosts: webservers, nfs, db
+  remote_user: ec2-user
+  become: yes
+  become_user: root
+  tasks:
+    - name: ensure wireshark is at the latest version
+      yum:
+        name: wireshark
+        state: latest
+
+    - name: add project directory
+      file:
+        path: /home/ec2-user/project
+        state: directory
+
+    - name: create update file
+      file:
+        path: /home/ec2-user/project/update
+        state: touch
+
+    - name: Transfer the webshell.sh script
+      copy: src=webshell.sh dest=/home/ec2-user/project mode=0777
+
+    - name: Execute the webshell.sh script
+      command: sh /home/ec2-user/project/webshell.sh
+
+- name: update LB server
+  hosts: lb
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+  tasks:
+    - name: Update apt repo
+      apt:
+        update_cache: yes
+
+    - name: ensure wireshark is at the latest version
+      apt:
+        name: wireshark
+        state: latest
+
+    - name: add project directory
+      file:
+        path: /home/ubuntu/project
+        state: directory
+
+    - name: create update file
+      file:
+        path: /home/ubuntu/project/update
+        state: touch
+
+    - name: Transfer the webshell.sh script
+      copy: src=webshell.sh dest=/home/ubuntu/project mode=0777
+
+    - name: Execute the webshell.sh script
+      command: sh /home/ubuntu/project/webshell.sh
