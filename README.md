@@ -1,2 +1,2 @@
 # **Ansible-config**
-ansible configuration and management
+*ansible* configuration and management
