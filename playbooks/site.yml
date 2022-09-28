@@ -1,10 +1,4 @@
 ---
-#- hosts: all
-#- import_playbook: ../static-assignments/common.yml
-
-- hosts: uat-webservers
-- import_playbook: ../static-assignments/uat-webservers.yml
-
 - hosts: all
 - name: Include dynamic variables 
   tasks:
@@ -13,6 +7,15 @@
   tags:
     - always
 
-- hosts: webservers
+- name: delete wireshack installation
+  import_playbook: ../static-assignments/common-del.yml
+
 - name: Webserver assignment
   import_playbook: ../static-assignments/webservers.yml
+
+- name: install and configure MySql
+  import_playbook: ../static-assignments/db_servers.yml
+
+- name: Loadbalancers assignment
+  - import_playbook: ../static-assignments/loadbalancers.yml
+    when: load_balancer_is_required 

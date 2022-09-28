@@ -1,0 +1,10 @@
+mysql_root_password: PassWord.1
+mysql_databases:
+  - name: project13_db
+    encoding: latin1
+    collation: latin1_general_ci
+mysql_users:
+  - name: pro13_user
+    host: "%"
+    password: similarly-secure-password
+    priv: "project13_db.*:ALL"
