@@ -1,0 +1,38 @@
+---
+- hosts: lb
+  become: true
+  vars_files:
+    - roles/nginxRole/vars/main.yml
+
+  tasks:
+  - name: Update hosts
+    lineinfile:
+      path: /etc/hosts
+      state: present
+      line: "{{ item }}"
+    with_items:
+    - '{{ web1 }} web1'
+    - '{{ web2 }} web2'
+
+  - name: Install nginx webserver
+    apt: name=nginx state=latest update_cache=true
+    notify: restart nginx
+
+  - name: configure nginx for loadbalancing
+      template:
+        src: ../roles/nginxRole/templates/nginx.conf.j2
+        dest: "/etc/nginx/nginx.conf"
+      notify: reload nginx
+
+- handlers:
+  - name: restart nginx
+    become: yes
+    service: name=nginx state=restarted
+
+  - name: validate nginx configuration
+    command: nginx -t -c /etc/nginx/nginx.conf
+    changed_when: false
+
+  - name: reload nginx
+    service: name=nginx state=reloaded
+    when: nginx_service_state == "started"

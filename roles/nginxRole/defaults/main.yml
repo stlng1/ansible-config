@@ -1,8 +1,7 @@
- ---
- # default files foe apacheRole
- enable_nginx_lb: false
- load_balancer_is_required: false
+---
+enable_nginx_lb: false
+load_balancer_is_required: false
 
- # DNS mapping for webservers
- Web1: 172.31.40.75
- Web2: 172.31.47.8
+#IP mapping for servers
+web1: 172.31.46.159
+web2: 172.31.37.19
