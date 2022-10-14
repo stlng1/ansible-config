@@ -1,35 +1,46 @@
 ---
-- name: Install apache and dependencies
-  become: yes
-  apt:
-    name:
-      - apache2
-      - libxml2-dev
-    state: present
+- name: Install prerequisites
+  apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+  loop: [ 'aptitude' ]
 
-- name: start service apache, if not started
-  become: yes
-  ansible.builtin.service:
-    name: apache2
-    state: started
+- name: Install Apache
+  apt: name=apache2 update_cache=yes state=latest
 
-- name: enable required apache2 modules
-  become: yes
-  shell:
-    a2enmod rewrite
-    a2enmod proxy
-    a2enmod proxy_balancer
-    a2enmod proxy_http
-    a2enmod headers
-    a2enmod lbmethod_bytraffic
-  notify: Restart apache2 service
+- name: Install apache dependencies
+  apt: name=libxml2-dev state=present
+  notify: Reload Apache
 
-- name: copy configuration file
-  become: yes
+- name: enable apache dependencies
+  apache2_module: name={{ item }} state=present
+  with_items:
+    - rewrite
+    - proxy
+    - proxy_balancer
+    - proxy_http
+    - headers
+    - lbmethod_bytraffic
+  notify: Reload Apache
+  
+- name: Create document root
+  file:
+    path: "/var/www/{{ http_host }}"
+    state: directory
+    owner: "{{ app_user }}"
+    mode: '0755'
+
+- name: Copy index test page
   template:
-    src: apache.conf.j2
-    dest: /etc/apache2/sites-available/000-default.conf
-    owner: root
-    group: root
-    mode: 0664
-  notify: Restart apache2 service
+    src: roles/apacheRole/templates/index.html.j2
+    dest: "/var/www/{{ http_host }}/index.html"
+
+- name: Set up Apache virtuahHost
+  template:
+    src: roles/apacheRole/templates/apache.conf.j2
+    dest: "/etc/apache2/sites-available/000-default.conf"
+  notify: Reload Apache
+
+- name: "UFW - Allow HTTP on port {{ http_port }}"
+  ufw:
+    rule: allow
+    port: "{{ http_port }}"
+    proto: tcp

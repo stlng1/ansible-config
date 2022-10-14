@@ -3,7 +3,6 @@
   hosts: db
   become: yes
   gather_facts: yes
-
   roles:
     - role: mysqlRole
       mysql_databases:
@@ -11,7 +10,7 @@
           encoding: utf8
           collation: utf8_bin
       mysql_users:
-        - name: weba
+        - name: webaccess
           password: WebaPass
           priv: "tooling.*:ALL"
           update_password: on_create

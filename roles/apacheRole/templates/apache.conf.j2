@@ -1,14 +1,20 @@
-<VirtualHost *:80>
+<VirtualHost *:{{ http_port }}>
+   ServerAdmin webmaster@localhost
+   ServerName {{ http_host }}
+   ServerAlias www.{{ http_host }}
+   DocumentRoot /var/www/{{ http_host }}
+   ErrorLog ${APACHE_LOG_DIR}/error.log
+   CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-       <Proxy "balancer://mycluster">
-                     BalancerMember http://{{Web1}}:80/index.php loadfactor=5 timeout=1
-                     BalancerMember http://{{Web2}}:80/index.php loadfactor=5 timeout=1
-                     ProxySet lbmethod=bytraffic
-                     # ProxySet lbmethod=byrequests
-              </Proxy>
+<Proxy "balancer://mycluster">
+               BalancerMember http://{{ web1 }}:80 loadfactor=5 timeout=1
+               BalancerMember http://{{ web2 }}:80 loadfactor=5 timeout=1
+               ProxySet lbmethod=bytraffic
+               # ProxySet lbmethod=byrequests
+        </Proxy>
 
-              ProxyPreserveHost On
-              ProxyPass / balancer://mycluster/
-              ProxyPassReverse / balancer://mycluster/
+        ProxyPreserveHost On
+        ProxyPass / balancer://mycluster/
+        ProxyPassReverse / balancer://mycluster/
 
 </VirtualHost>

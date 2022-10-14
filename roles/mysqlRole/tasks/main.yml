@@ -95,3 +95,14 @@
 
 - name: Flush handlers again
   ansible.builtin.meta: flush_handlers
+
+- name: allow connections from remote hosts
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    # The String to Search
+    regexp: "bind-address = 127.0.0.1" 
+    # The String to Replace
+    line: "bind-address = 0.0.0.0"
+    state: present
+    backup: yes
+  notify: restart mysql server

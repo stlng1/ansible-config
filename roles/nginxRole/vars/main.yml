@@ -1,8 +1,0 @@
----
-your_domain: "example"
-web1: "172.31.46.159"
-web2: "172.31.37.19"
-disable_default: true
-
-
-
