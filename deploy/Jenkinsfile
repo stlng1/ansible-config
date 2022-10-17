@@ -19,3 +19,13 @@
     }
     }
 }
+
+    stage('Package') {
+      steps {
+        script {
+          sh 'echo "Testing Stage"'
+        }
+      }
+    }
+    }
+}
