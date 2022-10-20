@@ -25,20 +25,6 @@
   - lbmethod_bytraffic
   notify: Reload Apache
 
-  #- name: Create document root
-  #  become: true
-  #  file:
-  #    path: "/var/www/{{ http_host }}"
-  #    state: directory
- #    owner: "{{ app_user }}"
-  #    mode: '0755'
-
-  #- name: Copy index test page
-  #  become: true
-  #  template:
-  #    src: ../roles/apacheRole/templates/index.html.j2
-#    dest: "/var/www/{{ http_host }}/index.html"
-
 - name: Set up Apache virtuahHost
   become: true
   template:
