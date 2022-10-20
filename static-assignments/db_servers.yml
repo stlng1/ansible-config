@@ -4,7 +4,7 @@
   become: yes
   gather_facts: yes
   roles:
-    - role: mysqlRole
+    - role: roles/mysqlRole
       mysql_databases:
         - name: tooling
           encoding: utf8
