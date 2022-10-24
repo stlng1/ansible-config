@@ -1,7 +1,0 @@
-- name: Install default MySQL
-  hosts: db
-  vars:
-    mysql_version: '5.7.25'
- 
-  roles:
-    - { role: kaos2oak.mysql }
