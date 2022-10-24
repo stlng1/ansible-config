@@ -10,13 +10,14 @@
 - name: delete wireshack installation
   import_playbook: ../static-assignments/common-del.yml
 
+- name: Database server assignment
+  import_playbook: ../static-assignments/db_servers.yml
+
 - name: Webserver assignment
   import_playbook: ../static-assignments/webservers.yml
 
-  #- import_playbook: ../static-assignments/webdb-client.yml
-
-  #- name: Database server assignment
-  # import_playbook: ../static-assignments/db_servers.yml
+- name: webserver mysql-client assignment
+  import_playbook: ../static-assignments/webdb-client.yml
 
 - name: Loadbalancers assignment
   import_playbook: ../static-assignments/loadbalancers.yml

@@ -16,7 +16,7 @@ upstream myproject {
 
 server {
     listen 80;
-    server_name www.{{ your_domain }}.com;
+    server_name www.{{ http_host }}.com;
     location / {
       proxy_pass http://myproject;
     }
