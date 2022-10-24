@@ -1,8 +1,8 @@
 ---
-- name: install mysql-client on webservers
-  hosts: webservers
+- name: install mysql database servers
+  hosts: db
   become: yes
-  gather_facts: false
+  gather_facts: yes
 
   roles:
     - role: buluma.mysql
@@ -15,7 +15,11 @@
           password: WebPass
           priv: "tooling.*:ALL"
           update_password: on_create
+
+  hosts: webservers
+  become: true
   tasks:
     - include_role:
         name: buluma.mysql
-        tasks_from: dbclient.yml
+        tasks_from: webdb.yml
+
