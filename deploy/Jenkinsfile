@@ -18,16 +18,16 @@ pipeline {
             }
         }
         
-        stage ('Prepare Ansible For Execution') {
-            steps {
-                sh 'echo ${WORKSPACE}' 
-                sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/.ansible.cfg'  
-            }
-        }
-
         stage('SCM checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/stlng1/ansible-config.git'
+            }
+        }
+
+        stage('Prepare Ansible For Execution') {
+            steps {
+                sh 'echo ${WORKSPACE}' 
+                sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/.ansible.cfg'  
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
             }
         }
 
-        stage ('Clean Workspace after build') {
+        stage('Clean Workspace after build') {
             steps {
                 cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
             }
