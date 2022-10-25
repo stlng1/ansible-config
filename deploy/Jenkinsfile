@@ -31,6 +31,7 @@ pipeline {
             steps {
                 sh 'echo ${WORKSPACE}' 
                 sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/.ansible.cfg'  
+                sh 'chmod 755 /home/ubuntu/.local/bin/ansible-playbook'
             }
         }
 
