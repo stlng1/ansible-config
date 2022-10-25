@@ -1,50 +1,50 @@
-   pipeline {
+pipeline {
     agent any
 
-  stages {
-    stage('Build') {
-      steps {
-        script {
-          sh 'echo "Building Stage"'
-        }
-      }
+    environment {
+        ANSIBLE_CONFIG="${WORKSPACE}/deploy/ansible.cfg"
     }
 
-    stage('Test') {
-      steps {
-        script {
-          sh 'echo "Testing Stage"'
-        }
-      }
-    }
-    
-    stage('Package') {
-      steps {
-        script {
-          sh 'echo "Packaging Stage"'
-        }
-      }
+    parameters {
+      string(name: 'inventory', defaultValue: 'dev',  description: 'This is the inventory file for the environment to deploy configuration')
     }
 
-    stage('Deploy') {
-      steps {
-        script {
-          sh 'echo "Deploying Stage"'
+    stages {
+        stage('initial cleanup') {
+            steps {
+              dir("${WORKSPACE}") {
+                deleteDir()
+              }
+            }
         }
-      }
-    }
-
-    
-    stage('Clean up') {
-      steps {
-        script {
-          sh 'echo "Clean up Stage"'
+        
+        stage ('Prepare Ansible For Execution') {
+            steps {
+                sh 'echo ${WORKSPACE}' 
+                sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/.ansible.cfg'  
+            }
         }
-      }
-    }
-    }
 
-  }
+        stage('SCM checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/stlng1/ansible-config.git'
+            }
+        }
+
+        stage('Execute Ansible Playbook') {
+            steps {
+                ansiblePlaybook become: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible 2.13.5', inventory: 'inventory/dev', playbook: 'playbooks/site.yml'
+            }
+        }
+
+        stage ('Clean Workspace after build') {
+            steps {
+                cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
+            }
+        }
+    }
+}
+
 
     
     
