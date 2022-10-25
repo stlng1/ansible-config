@@ -1,22 +1,31 @@
 pipeline {
     agent any
 
-    environment {
-        ANSIBLE_CONFIG="${WORKSPACE}/deploy/ansible.cfg"
-    }
-
     parameters {
-      string(name: 'inventory', defaultValue: 'dev',  description: 'This is the inventory file for the environment to deploy configuration')
-    }
+        string (name: 'env', defaultValue: 'dev.yml',  description: 'This is the inventory file for the environment to deploy configuration')
+        }
+
+    environment {
+        ANSIBLE_CONFIG="${WORKSPACE}/deploy/.ansible.cfg"
+            }
+
+    
 
     stages {
-        stage('initial cleanup') {
+        stage("Initial cleanup") {
             steps {
-              dir("${WORKSPACE}") {
+                dir("${WORKSPACE}") {
                 deleteDir()
-              }
+                    }
+                }
+            }
+
+        stage('SCM checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/stlng1/ansible-config.git'
             }
         }
+
         
         stage('Prepare Ansible For Execution') {
             steps {
@@ -25,11 +34,7 @@ pipeline {
             }
         }
 
-        stage('SCM checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/stlng1/ansible-config.git'
-            }
-        }
+
 
         stage('Execute Ansible Playbook') {
             steps {
