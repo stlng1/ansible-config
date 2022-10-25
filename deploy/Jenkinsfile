@@ -31,7 +31,6 @@ pipeline {
             steps {
                 sh 'echo ${WORKSPACE}' 
                 sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/.ansible.cfg'  
-                sh 'chmod 755 /home/ubuntu/.local/bin/ansible-playbook'
             }
         }
 
@@ -39,7 +38,7 @@ pipeline {
 
         stage('Execute Ansible Playbook') {
             steps {
-                ansiblePlaybook become: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible 2.13.5', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
+                ansiblePlaybook become: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible 2.13.5', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml', sudo: true
             }
         }
 
