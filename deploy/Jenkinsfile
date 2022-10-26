@@ -38,7 +38,7 @@ pipeline {
 
         stage('Execute Ansible Playbook') {
             steps {
-                ansiblePlaybook credentialsId: 'private-key', installation: 'Ansible 2.13.5', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
+                ansiblePlaybook become: true, credentialsId: 'ec2-private-key', disableHostKeyChecking: true, installation: 'Ansible 2.13.5', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
             }
         }
 
