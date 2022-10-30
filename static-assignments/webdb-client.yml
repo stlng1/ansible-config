@@ -1,0 +1,21 @@
+---
+- name: install mysql-client on webservers
+  hosts: tooling, todo
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: buluma.mysql
+      mysql_databases:
+        - name: tooling
+          encoding: utf8
+          collation: utf8_bin
+      mysql_users:
+        - name: weba
+          password: WebPass
+          priv: "tooling.*:ALL"
+          update_password: on_create
+  tasks:
+    - include_role:
+        name: buluma.mysql
+        tasks_from: dbclient.yml
