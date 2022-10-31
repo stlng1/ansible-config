@@ -1,0 +1,29 @@
+- name: Configure mysql client
+  ini_file:
+    dest: "{{ mysql_configuration_destination }}/{{ mysql_name }}-client.cnf"
+    section: client
+    option: socket
+    value: "{{ mysql_socket }}"
+    mode: "0644"
+
+- name: Initialize mysql
+  ansible.builtin.command:
+    cmd: "{{ mysql_initialize_command }}"
+    creates: /var/lib/mysql/mysql
+  when:
+    - ansible_distribution in [ "Alpine", "Archlinux" ]
+
+- name: Start and enable mysql
+  ansible.builtin.service:
+    name: "{{ mysql_service }}"
+    state: started
+    enabled: yes
+
+- name: Place my.cnf
+  template:
+    src: ../buluma.mysql/templates/my.cnf.j2
+    dest: /root/.my.cnf
+    mode: "0640"
+
+- name: Flush handlers
+  meta: flush_handlers

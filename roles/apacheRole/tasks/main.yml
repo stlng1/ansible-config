@@ -1,45 +1,39 @@
 ---
 - name: Install prerequisites
+  become: true
   apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
   loop: [ 'aptitude' ]
 
 - name: Install Apache
+  become: true
   apt: name=apache2 update_cache=yes state=latest
 
 - name: Install apache dependencies
+  become: true
   apt: name=libxml2-dev state=present
   notify: Reload Apache
 
 - name: enable apache dependencies
+  become: true
   apache2_module: name={{ item }} state=present
   with_items:
-    - rewrite
-    - proxy
-    - proxy_balancer
-    - proxy_http
-    - headers
-    - lbmethod_bytraffic
+  - rewrite
+  - proxy
+  - proxy_balancer
+  - proxy_http
+  - headers
+  - lbmethod_bytraffic
   notify: Reload Apache
-  
-- name: Create document root
-  file:
-    path: "/var/www/{{ http_host }}"
-    state: directory
-    owner: "{{ app_user }}"
-    mode: '0755'
-
-- name: Copy index test page
-  template:
-    src: roles/apacheRole/templates/index.html.j2
-    dest: "/var/www/{{ http_host }}/index.html"
 
 - name: Set up Apache virtuahHost
+  become: true
   template:
-    src: roles/apacheRole/templates/apache.conf.j2
+    src: ../roles/apacheRole/templates/apache.conf.j2
     dest: "/etc/apache2/sites-available/000-default.conf"
   notify: Reload Apache
 
 - name: "UFW - Allow HTTP on port {{ http_port }}"
+  become: true
   ufw:
     rule: allow
     port: "{{ http_port }}"

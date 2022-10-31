@@ -1,22 +1,24 @@
 pipeline {
     agent any
 
-    environment {
-        ANSIBLE_CONFIG="${WORKSPACE}/deploy/ansible.cfg"
-    }
-
     parameters {
-      string(name: 'inventory', defaultValue: 'dev',  description: 'This is the inventory file for the environment to deploy configuration')
-    }
+        string (name: 'env', defaultValue: 'dev.yml',  description: 'This is the inventory file for the environment to deploy configuration')
+        }
+
+    environment {
+        ANSIBLE_CONFIG="${WORKSPACE}/deploy/.ansible.cfg"
+            }
+
+    
 
     stages {
-        stage('initial cleanup') {
+        stage("Initial cleanup") {
             steps {
-              dir("${WORKSPACE}") {
+                dir("${WORKSPACE}") {
                 deleteDir()
-              }
+                    }
+                }
             }
-        }
 
         stage('SCM checkout') {
             steps {
@@ -24,24 +26,31 @@ pipeline {
             }
         }
 
-        stage ('Prepare Ansible For Execution') {
+        
+        stage('Prepare Ansible For Execution') {
             steps {
                 sh 'echo ${WORKSPACE}' 
                 sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/.ansible.cfg'  
             }
         }
 
+
+
         stage('Execute Ansible Playbook') {
             steps {
-                ansiblePlaybook become: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible 2.13.5', inventory: 'inventory/${inventory}', playbook: 'playbooks/site.yml'
+                ansiblePlaybook become: true, credentialsId: 'private-key2', disableHostKeyChecking: true, installation: 'Ansible 2.13.5', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
             }
         }
 
-        stage ('Clean Workspace after build') {
+        stage('Clean Workspace after build') {
             steps {
                 cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
             }
         }
     }
 }
+
+
+    
+    
 

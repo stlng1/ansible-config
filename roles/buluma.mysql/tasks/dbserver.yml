@@ -1,21 +1,6 @@
 ---
-# tasks file for mysql
-
-- name: Import assert.yml
-  ansible.builtin.import_tasks: assert.yml
-  run_once: yes
-  delegate_to: localhost
-
-- name: Install mysql
-  ansible.builtin.package:
-    name: "{{ mysql_packages }}"
-    state: present
-  notify:
-    - Set root password
-    - Systemctl daemon-reexec
-
 - name: Configure mysql server
-  community.general.ini_file:
+  ini_file:
     dest: "{{ mysql_configuration_destination }}/{{ mysql_name }}-server.cnf"
     section: "{{ item.section }}"
     option: "{{ item.option }}"
@@ -27,13 +12,13 @@
   notify:
     - Restart mysql server
 
-- name: Configure mysql client
-  community.general.ini_file:
-    dest: "{{ mysql_configuration_destination }}/{{ mysql_name }}-client.cnf"
-    section: client
-    option: socket
-    value: "{{ mysql_socket }}"
-    mode: "0644"
+# - name: Configure mysql client
+#   ini_file:
+#     dest: "{{ mysql_configuration_destination }}/{{ mysql_name }}-client.cnf"
+#     section: client
+#     option: socket
+#     value: "{{ mysql_socket }}"
+#     mode: "0644"
 
 - name: Initialize mysql
   ansible.builtin.command:
@@ -49,16 +34,17 @@
     enabled: yes
 
 - name: Flush handlers
-  ansible.builtin.meta: flush_handlers
+  meta: flush_handlers
 
 - name: Place my.cnf
-  ansible.builtin.template:
-    src: my.cnf.j2
+  template:
+    src: ../buluma.mysql/templates/my.cnf.j2
     dest: /root/.my.cnf
     mode: "0640"
 
 - name: Create databases
-  community.mysql.mysql_db:
+  become: true
+  mysql_db:
     name: "{{ item.name }}"
     state: "{{ item.state | default('present') }}"
     target: "{{ item.target | default(omit) }}"
@@ -72,10 +58,10 @@
     label: "{{ item.name }}"
   when:
     - mysql_databases is defined
-  no_log: yes
+  no_log: false
 
 - name: Create users
-  community.mysql.mysql_user:
+  mysql_user:
     name: "{{ item.name }}"
     state: present
     password: "{{ item.password | default(omit) }}"
@@ -94,15 +80,4 @@
   no_log: yes
 
 - name: Flush handlers again
-  ansible.builtin.meta: flush_handlers
-
-- name: allow connections from remote hosts
-  lineinfile:
-    path: /etc/mysql/mysql.conf.d/mysqld.cnf
-    # The String to Search
-    regexp: "bind-address = 127.0.0.1" 
-    # The String to Replace
-    line: "bind-address = 0.0.0.0"
-    state: present
-    backup: yes
-  notify: restart mysql server
+  meta: flush_handlers

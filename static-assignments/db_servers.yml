@@ -2,9 +2,9 @@
 - name: Install mysql on db servers
   hosts: db
   become: yes
-  gather_facts: yes
+  gather_facts: false
   roles:
-    - role: mysqlRole
+    - role: roles/buluma.mysql
       mysql_databases:
         - name: tooling
           encoding: utf8
@@ -14,3 +14,9 @@
           password: WebaPass
           priv: "tooling.*:ALL"
           update_password: on_create
+
+  tasks:
+    - include_role:
+        name: buluma.mysql
+        tasks_from: dbserver.yml
+
