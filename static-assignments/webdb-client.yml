@@ -1,6 +1,6 @@
 ---
 - name: install mysql-client on webservers
-  hosts: webservers
+  hosts: tooling, todo
   become: yes
   gather_facts: false
 
