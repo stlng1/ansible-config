@@ -10,6 +10,9 @@
 # - name: delete wireshack installation
 #   import_playbook: ../static-assignments/common-del.yml
 
+- name: initialize remote system correctly
+  import_playbook: ../static-assignments/pre-tasks.yml
+
 - name: Database server assignment
   import_playbook: ../static-assignments/db_servers.yml
 
