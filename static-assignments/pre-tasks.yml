@@ -1,8 +1,0 @@
-- hosts: all
-  gather_facts: no
-
-  pre_tasks:
-  - name: "Make sure remote system is initialized correctly"
-    raw: 'ln -s /usr/bin/python3 /usr/bin/python'
-    register: set_symlink
-    failed_when: set_symlink.rc != 0 and set_symlink.rc != 1 
