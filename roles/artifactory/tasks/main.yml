@@ -16,11 +16,11 @@
 - name: Configuring java path
   ansible.builtin.template:
     src: templates/bash-profile.j2
-    dest: .bash_profile
+    dest: ./bash_profile
   
 
 - name: reload the /etc/profile
-  shell: source ~/.bash_profile
+  shell: source ./bash_profile
 
 
 - name: add the repository key to repos list
