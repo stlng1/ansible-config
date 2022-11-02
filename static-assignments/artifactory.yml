@@ -1,6 +1,8 @@
 ---
 - hosts: artifactory
-  roles: 
+  serial:
+    - 1
+    - 100%
+  roles:
     - artifactory
-  tags:
-    - artifactory
+    
