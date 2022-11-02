@@ -15,4 +15,4 @@ ansible_python_interpreter=/usr/bin/python
 172.31.39.72 ansible_ssh_user='ec2-user' 
 
 [artifactory]
-172.31.35.116 ansible_ssh_user='ubuntu'
+172.31.46.221 ansible_ssh_user='ec2-user'
