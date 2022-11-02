@@ -1,8 +1,9 @@
 ---
 - hosts: artifactory
+  vars:
+    artifactory_enabled: true
   serial:
     - 1
     - 100%
   roles:
     - artifactory
-    
