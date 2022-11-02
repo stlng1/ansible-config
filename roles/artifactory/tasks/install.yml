@@ -107,16 +107,16 @@
     path: "{{ artifactory_home }}/var/etc/system.yaml"
   register: systemyaml
 
-- name: Configure systemyaml
+- name: Configure system.yaml
   become: yes
   template:
     src: "{{ artifactory_system_yaml_template }}"
     dest: "{{ artifactory_home }}/var/etc/system.yaml"
     mode: 0644
-  when:
-    - artifactory_systemyaml is defined
-    - artifactory_systemyaml | length > 0
-    - artifactory_systemyaml_override or (not systemyaml.stat.exists)
+  # when:
+  #   - artifactory_systemyaml is defined
+  #   - artifactory_systemyaml | length > 0
+  #   - artifactory_systemyaml_override or (not systemyaml.stat.exists)
   notify: restart artifactory
 
 - name: Configure master key
