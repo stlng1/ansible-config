@@ -107,7 +107,7 @@
     path: "{{ artifactory_home }}/var/etc/system.yaml"
   register: systemyaml
 
-- name: Configure system.yaml
+- name: Configure systemyaml
   become: yes
   template:
     src: "{{ artifactory_system_yaml_template }}"
