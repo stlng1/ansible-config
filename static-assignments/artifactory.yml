@@ -1,9 +1,14 @@
 ---
+# - hosts: artifactory
+#   vars:
+#     artifactory_enabled: true
+#   serial:
+#     - 1
+#     - 100%
+#   roles:
+#     - artifactory
+
 - hosts: artifactory
-  vars:
-    artifactory_enabled: true
-  serial:
-    - 1
-    - 100%
+  become: true
   roles:
     - artifactory
