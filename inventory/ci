@@ -8,4 +8,4 @@
 <SonarQube-Private-IP-Address>
 
 [artifact_repository]
-<Artifact_repository-Private-IP-Address>
+172.31.35.116 ansible_ssh_user='ubuntu'

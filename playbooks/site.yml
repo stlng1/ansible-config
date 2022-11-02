@@ -2,12 +2,6 @@
 - hosts: all
   become: true
 
-# pre_tasks:
-# - name: "Make sure remote system is initialized correctly"
-#   raw: 'ln -s /usr/bin/python3 /usr/bin/python'
-#   register: set_symlink
-#   failed_when: set_symlink.rc != 0 and set_symlink.rc != 1 
-
 # - name: Include dynamic variables
 #   import_playbook: ../static-assignments/common.yml
 # - include: ../dynamic-assignments/env-vars.yml
@@ -16,6 +10,9 @@
 
 # - name: delete wireshack installation
 #   import_playbook: ../static-assignments/common-del.yml
+
+- name: artifactory assignment
+  import_playbook: ../static-assignments/artifactory.yml
 
 - name: Database server assignment
   import_playbook: ../static-assignments/db_servers.yml

@@ -1,0 +1,7 @@
+---
+- name: Start and enable Artifactory service
+  become: yes
+  service:
+    name: artifactory
+    state: started
+    enabled: yes
