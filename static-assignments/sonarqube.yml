@@ -1,5 +1,6 @@
 ---
 - hosts: sonarqube
-  become: true
+  become: yes
+  become_method: enable
   roles:
      - sonarqube
