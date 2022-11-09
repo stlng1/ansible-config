@@ -27,8 +27,8 @@
   import_playbook: ../static-assignments/nginx.yml
   when: load_balancer_is_required
 
-- name: todo assignment
-  ansible.builtin.import_playbook: ../static-assignments/todo.yml
+# - name: todo assignment
+#   ansible.builtin.import_playbook: ../static-assignments/todo.yml
 
 # - name: sonarqube assignment
 #   ansible.builtin.import_playbook: ../static-assignments/sonarqube.yml
