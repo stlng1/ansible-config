@@ -30,5 +30,5 @@
 # - name: todo assignment
 #   ansible.builtin.import_playbook: ../static-assignments/todo.yml
 
-# - name: sonarqube assignment
-#   ansible.builtin.import_playbook: ../static-assignments/sonarqube.yml
+- name: sonarqube assignment
+  ansible.builtin.import_playbook: ../static-assignments/sonarqube.yml
