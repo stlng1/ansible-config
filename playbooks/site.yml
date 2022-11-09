@@ -11,18 +11,24 @@
 # - name: delete wireshack installation
 #   import_playbook: ../static-assignments/common-del.yml
 
-- name: artifactory assignment
-  import_playbook: ../static-assignments/artifactory.yml
+# - name: artifactory assignment
+#   import_playbook: ../static-assignments/artifactory.yml
 
-- name: Database server assignment
+- name: database server assignment
   import_playbook: ../static-assignments/db_servers.yml
 
-- name: Webserver assignment
-  import_playbook: ../static-assignments/webservers.yml
+- name: tooling assignment
+  import_playbook: ../static-assignments/tooling.yml
 
-- name: webserver mysql-client assignment
+- name: mysql-client assignment
   import_playbook: ../static-assignments/webdb-client.yml
 
-- name: Loadbalancers assignment
-  import_playbook: ../static-assignments/loadbalancers.yml
+- name: nginx assignment
+  import_playbook: ../static-assignments/nginx.yml
   when: load_balancer_is_required
+
+- name: todo assignment
+  ansible.builtin.import_playbook: ../static-assignments/todo.yml
+
+# - name: sonarqube assignment
+#   ansible.builtin.import_playbook: ../static-assignments/sonarqube.yml

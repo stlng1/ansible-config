@@ -12,13 +12,13 @@
   notify:
     - Restart mysql server
 
-# - name: Configure mysql client
-#   ini_file:
-#     dest: "{{ mysql_configuration_destination }}/{{ mysql_name }}-client.cnf"
-#     section: client
-#     option: socket
-#     value: "{{ mysql_socket }}"
-#     mode: "0644"
+- name: Configure mysql client
+  ini_file:
+    dest: "{{ mysql_configuration_destination }}/{{ mysql_name }}-client.cnf"
+    section: client
+    option: socket
+    value: "{{ mysql_socket }}"
+    mode: "0644"
 
 - name: Initialize mysql
   ansible.builtin.command:

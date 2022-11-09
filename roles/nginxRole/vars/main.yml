@@ -1,10 +1,10 @@
 ---
-app_user: "ubuntu"
-http_host: "your_domain"
-http_conf: "your_domain.conf"
-http_port: "80"
-disable_default: true
+# app_user: "ubuntu"
+# http_host: "your_domain"
+# http_conf: "your_domain.conf"
+# http_port: "80"
+# disable_default: true
 
-web1: "172.31.37.22"
-web2: "172.31.37.223"
+# web1: "172.31.37.22"
+# web2: "172.31.37.223"
 

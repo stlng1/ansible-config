@@ -21,12 +21,12 @@
       - mysql_innodb_buffer_pool_size is string
     quiet: yes
 
-# - name: Test if mysql_innodb_io_capacity is set correctly
-#   ansible.builtin.assert:
-#     that:
-#       - mysql_innodb_io_capacity is defined
-#       - mysql_innodb_io_capacity is integer
-#     quiet: yes
+- name: Test if mysql_innodb_io_capacity is set correctly
+  ansible.builtin.assert:
+    that:
+      - mysql_innodb_io_capacity is defined
+      - mysql_innodb_io_capacity is integer
+    quiet: yes
 
 - name: Test item.name item in mysql_databases is set correctly
   ansible.builtin.assert:

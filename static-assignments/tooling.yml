@@ -1,4 +1,4 @@
 ---
-- hosts: tooling, todo
+- hosts: tooling
   roles:
      - roles/webserver
